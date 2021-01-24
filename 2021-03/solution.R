@@ -3,8 +3,8 @@ library(dplyr)
 library(tidyr)
 library(readxl)
 library(purrr)
-library(here)
 
+library(here)
 setwd(here("2021-03"))
 
 
@@ -21,7 +21,7 @@ data <-  map_dfr(all_sheets,
 
 store_data <- data %>% 
     gather('metric','Products_Sold', -c(Store, Date)) %>% 
-    separate(.,metric, into = c('Customer_Type','Product')) %>% 
+    separate(.,metric, sep = ' - ', into = c('Customer_Type','Product')) %>% 
     mutate(Quarter = quarter(Date))
     
 
@@ -35,3 +35,4 @@ out2 <- store_data %>%
 
 write.csv(out1,'Product_Quarter_Output.csv')
 write.csv(out2,'Store_Customer_Product_Output.csv')
+
