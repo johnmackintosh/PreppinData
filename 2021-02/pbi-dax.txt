@@ -1,0 +1,14 @@
+Quantity, Value and Avg Value by Brand and Bike = 
+SUMMARIZECOLUMNS(  
+Input[Brand],
+Input[Bike Type],
+"Total Quantity", SUMX(Input,Input[Quantity]), "Order Value", SUMX(Input,[Order Value]), "Avg Value", AVERAGEX(Input, Input[Value per Bike]) 
+)  
+
+
+Quantity, Value and Avg Days to Ship by Store and Brand = 
+SUMMARIZECOLUMNS(  
+Input[Brand],
+Input[Store],
+"Total Quantity", SUMX(Input,Input[Quantity]), "Order Value", SUMX(Input,[Order Value]), "Avg Days to Ship", AVERAGEX(Input, [Days To Ship]) 
+)  
