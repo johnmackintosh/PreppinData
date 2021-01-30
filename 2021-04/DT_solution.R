@@ -2,7 +2,6 @@ library(readxl)
 library(purrr)
 library(data.table)
 library(splitstackshape)
-
 library(here)
 setwd(here("2021-04"))
 
@@ -14,14 +13,11 @@ all_sheets <- wb %>%
 
 datasheets <- all_sheets[which(!all_sheets %in% c('Targets'))]
 
-targets <- read_excel(wb, sheet = 'Targets')
-setDT(targets)
+targets <- setDT(read_excel(wb, sheet = 'Targets'))
 
-data <-  map_dfr(datasheets,
+data <-  setDT(map_dfr(datasheets,
                  ~ read_excel(wb, sheet = .x),
-                 .id = "sheet")
-
-setnames(setDT(data),old = 'sheet', new = 'Store')
+                 .id = "Store"))
 
 
 
@@ -45,7 +41,8 @@ out2 <- targets[out2, on = 'joinkey'][,':='(joinkey = NULL,
 
 out2[,variance := Products_Sold - Target][]
 
-setorder(out2, Quarter, -variance)
+setorder(out2, Quarter, -variance) 
 
 out2[,rank := frank(-variance), by = Quarter][]
 
+fwrite(out2,"output2DT.csv")
