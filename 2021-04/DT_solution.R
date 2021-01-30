@@ -21,7 +21,7 @@ data <-  setDT(map_dfr(datasheets,
 
 
 
-DT <- melt(data,id.vars = c('Store','Date'), variable.factor = FALSE)
+DT <- melt(data, id.vars = c('Store','Date'), variable.factor = FALSE)
 setnames(DT <- cSplit(DT, splitCols = "variable", sep = "-", direction = 'wide'),
          old = c('variable_1', 'variable_2'), new = c('Customer_Type','Product'))
 DT[,Quarter := quarter(Date)][,Date := NULL][]
