@@ -7,8 +7,9 @@ You don't need to do that..
 
 - get the latest 'from date' by client (max date)
 
-- create a lookup table - all rows where from date = max date (by client)
-Then take the unique values from this table = 527 rows.
+- create a lookup table - selecting client, client ID and account manager, then filter for  all rows where from date = max date (by client)
+Then take the unique values from this resulting table
+That will return 527 rows.
 That's your lookup table
 
 
