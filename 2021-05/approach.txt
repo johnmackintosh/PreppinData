@@ -12,17 +12,17 @@ Then take the unique values from this table = 527 rows.
 That's your lookup table
 
 
-Do a full join of this table back to the main table, on 'client'
+- Do a full join of this table back to the main table, on 'client'
 
-You can either try and update non matches in the client id, account manager and from date columns
+- You can either try and update non matches in the client id, account manager and from date columns
 OR
-I chose to delete the original from date, client id and account manager, then rename the lookup columns to the original names
+- I chose to delete the original from date, client id and account manager, then rename the lookup columns to the original names
 (so, if you had 'max date' in your lookup table, this is now 'from date'
 
-Take the unique values from the resulting joined table
+- Take the unique values from the resulting joined table
 (make sure the columns are in the correct order (data.table moves things around a bit))
 
 You should have 13528 rows.
 
-I checked my outputs with the results looking for any differences (setdiff in dplyr parlance, fsettdiff,  anti_join in SQL)
-You should return nothing, because everything matches
+I checked my outputs with the provided expected results looking for any differences (setdiff in dplyr parlance, fsettdiff,  anti_join in SQL)
+You should return nothing, because everything matches :)
