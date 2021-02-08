@@ -1,7 +1,6 @@
     library(data.table) 
     library(here)
     library(janitor)
-    library(dplyr)
     setwd(here("2021-05"))
     
     DT <- clean_names(fread("Joined Dataset.csv"))
@@ -18,11 +17,9 @@
     
     # join and update account manager, client_id and original from date
     
-    DT[,client_id := am_lookup[.BY,(client), client_id, on = "client"],
-       by = client]
+    DT[am_lookup, client_id := i.client_id, on = "client"]
     
-    DT[,account_manager := am_lookup[.BY , account_manager, on = "client"],
-         by = client]
+    DT[am_lookup, account_manager := i.account_manager, on = "client"]
     
     DT[,from_date := latest_date, by = .(client)][,latest_date := NULL][]
     
@@ -33,3 +30,5 @@
     
     # should be 0
     fsetdiff(results, output)
+    
+    outputs <- fwrite(output,"output.csv")
