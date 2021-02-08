@@ -1,11 +1,8 @@
 library(readxl)
 library(purrr)
 library(data.table)
-library(splitstackshape)
-
 library(here)
 setwd(here("2021-03"))
-
 
 wb <- "PD 2021 Wk 3 Input.xlsx"
 
@@ -15,20 +12,15 @@ all_sheets <- wb %>%
 
 data <-  map_dfr(all_sheets,
                  ~ read_excel(wb, sheet = .x),
-                 .id = "sheet")
+                 .id = "Store")
 
-setnames(setDT(data),old ='sheet', new = 'Store')
+DT <- melt(setDT(data),id.vars = c('Store','Date'), variable.factor = FALSE)
 
-DT <- melt(data,id.vars = c('Store','Date'), variable.factor = FALSE)
-setnames(DT <- cSplit(DT, splitCols = "variable", sep = "-", direction = 'wide'),
-         old = c('variable_1', 'variable_2'), new = c('Customer_Type','Product'))
+DT[, c("Customer_Type", "Product") := tstrsplit(`variable`, " - ", fixed = TRUE)
+   ][,variable := NULL]
+
 DT[,Quarter := quarter(Date)][,Date := NULL][]
 
+out1 <- unique(DT[,c('Product','Quarter','value')][,ProductQuarterSales := sum(value),by = .(Product, Quarter)][,value := NULL])[]
 
-out1 <- unique(DT[,.SD, .SDcols =c('Product','Quarter','value')
-           ][,ProductQuarterSales := sum(value),by = .(Product, Quarter)
-             ][,value := NULL])[]
-
-out2 <- unique(DT[,.SD, .SDcols =c('Product','Customer_Type','Store','value')
-                  ][,Sales := sum(value),by = .(Product, Customer_Type, Store)
-                    ][,value := NULL])[]
+out2 <- unique(DT[,c('Store','Customer_Type','Product','value')][,Sales := sum(value),by = .(Product, Customer_Type, Store)][,value := NULL])[]
