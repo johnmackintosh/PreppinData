@@ -19,19 +19,16 @@ am_lookup <- DT %>%
     group_by(client) %>% 
     filter(from_date == latest_date) %>% 
     select(client,account_manager, client_id) %>% 
-    rename(lookup_am = account_manager, 
-           lookup_id = client_id) %>% 
     distinct() 
 
 
-DT <- full_join(DT, am_lookup, by = 'client') %>% 
-    mutate(client_id = lookup_id, 
-           account_manager = lookup_am,
-           from_date = latest_date) %>% 
-    select(-c('lookup_am','lookup_id','latest_date')) %>% 
-    distinct() %>% 
-    select(training, contact_email, contact_name,
-           client, client_id, account_manager, from_date)
+DT <- DT %>% 
+    select(-c('account_manager', 'client_id')) %>% 
+    left_join(., am_lookup, by = 'client') %>% 
+    mutate(from_date = NULL) %>% 
+    rename(from_date = latest_date) %>% 
+    relocate(from_date, .after = last_col()) %>% 
+    distinct()
     
 
 # check results match the expected output
