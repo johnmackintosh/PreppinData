@@ -1,14 +1,14 @@
 library(readxl)
 library(dplyr)
 library(tidyr)
-data <- read_excel("2021-06/PGALPGAMoney2019.xlsx", 
-                   col_types = c("text", "numeric", "numeric", "text"))
+library(janitor)
+
+data <- read_excel("PGALPGAMoney2019.xlsx", 
+col_types = c("text", "numeric", "numeric", "text")) %>% 
+    janitor::clean_names()
+
 
 data <- data %>% 
-    rename(player = `PLAYER NAME`,
-            money = MONEY,
-            events = EVENTS,
-            tour = TOUR) %>% 
     mutate(count = 1L) %>% 
     group_by(tour) %>% 
     mutate(Total_Prize_Money = sum(money),
@@ -18,7 +18,7 @@ data <- data %>%
     ungroup()
 
 data <- data %>% 
-    group_by(player) %>% 
+    group_by(player_name) %>% 
     mutate(avg_per_event = money / events) %>% 
     ungroup()
 
@@ -31,7 +31,7 @@ data <- data %>%
     ungroup()
 
 data <- data %>% 
-    group_by(player) %>% 
+    group_by(player_name) %>% 
     mutate(rank_variance = (total_rank - tour_rank)) %>% 
     ungroup()
 
@@ -46,9 +46,9 @@ data <- data %>%
            Avg_Money_Per_Event, Avg_Difference_in_Ranking) %>% 
     distinct()
 
-output <- gather(data, key = 'Measure', value = 'Value', - tour) %>% 
-    pivot_wider(., names_from = 'tour', 
-                id_cols = 'Measure', 
+output <- pivot_longer(data, -tour, names_to = 'Measure', 
+                       values_to = 'Value') %>% 
+    pivot_wider(., names_from = 'tour', id_cols = 'Measure', 
                 values_from = 'Value') %>% 
     mutate(Difference_Between_Tours = LPGA - PGA) %>% 
     arrange(Measure)
