@@ -3,6 +3,9 @@
 
 solutions for the PreppinData challenges - R and Power BI
 
+
+https://preppindata.blogspot.com/2021/08/2021-week-36-excelling-in-prep.html
+
 https://preppindata.blogspot.com/2021/02/2021-week-8-karaoke-data.html
 
 https://preppindata.blogspot.com/2021/02/2021-week-6-comparing-prize-money-for.html
