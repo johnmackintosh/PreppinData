@@ -3,6 +3,7 @@
 
 solutions for the PreppinData challenges - R and Power BI
 
+https://preppindata.blogspot.com/2021/09/2021-week-37-re-looking-at-phone.html
 
 https://preppindata.blogspot.com/2021/08/2021-week-36-excelling-in-prep.html
 
